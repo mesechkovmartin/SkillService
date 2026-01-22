@@ -7,6 +7,7 @@ import HomePagePublic from './views/HomePage/HomePagePublic.jsx'
 import HomePagePrivate from './views/HomePage/HomePagePrivate.jsx'
 import Login from './views/Login/Login.jsx'
 import Signup from './views/Signup/Signup.jsx'
+import NotFound from './components/NotFound/NotFound.jsx'
 
 
 function App() {
@@ -21,9 +22,10 @@ function App() {
       <AppContext.Provider value={{ ...appState, setAppState }}>
        <Routes>
         <Route path='/' element={<HomePagePublic />} />
-        <Route path='/home' element={<Authenticated><HomePagePrivate /></Authenticated>} />
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
+        <Route path='*' element={<NotFound />} />
+        <Route path='/home' element={<Authenticated><HomePagePrivate /></Authenticated>} />
 
        </Routes>
      
