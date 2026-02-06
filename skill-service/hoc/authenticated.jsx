@@ -1,23 +1,17 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
+import { Navigate } from "react-router-dom";
 import { AppContext } from "../src/store/app.context";
-import  PropTypes from "prop-types";
+import PropTypes from "prop-types";
 
-export default function Authenticated ({ children }) {
+export default function Authenticated({ children }) {
+  const { user, loading } = useContext(AppContext);
 
-    const { appState } = useContext(AppContext);
+  if (loading) return <div className="p-6">Loading...</div>;
+  if (!user) return <Navigate to="/login" replace />;
 
-    useEffect(() => {
-        console.log('Curent appState:', appState);
-    }, [appState]);
-
-    if (!appState.user) {
-        console.warn('User not authenticated');
-        return <div>Please log in to access this page.</div>;
-    }
-     return <div>{children}</div>;
-
+  return <>{children}</>;
 }
 
 Authenticated.propTypes = {
-    children: PropTypes.node.isRequired,
+  children: PropTypes.node.isRequired,
 };
