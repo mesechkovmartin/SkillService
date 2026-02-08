@@ -4,14 +4,15 @@ import { AppContext } from "../src/store/app.context";
 import PropTypes from "prop-types";
 
 export default function Authenticated({ children }) {
-  const { user, loading } = useContext(AppContext);
+    const { user, loading } = useContext(AppContext);
 
-  if (loading) return <div className="p-6">Loading...</div>;
-  if (!user) return <Navigate to="/login" replace />;
+    if (loading) return <div className="min-h-screen flex items-center justify-center">
+      <span className="loading loading-spinner loading-lg text-blue-500"></span></div>;
+    if (!user) return <Navigate to="/login" replace />;
 
-  return <>{children}</>;
+    return <>{children}</>;
 }
 
 Authenticated.propTypes = {
-  children: PropTypes.node.isRequired,
+    children: PropTypes.node.isRequired,
 };
