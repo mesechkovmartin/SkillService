@@ -8,7 +8,7 @@ export default function Authenticated({ children }) {
 
     if (loading) return <div className="min-h-screen flex items-center justify-center">
       <span className="loading loading-spinner loading-lg text-blue-500"></span></div>;
-    if (!user) return <Navigate to="/login" replace />;
+    if (!user) return <Navigate to="/" replace />;
 
     return <>{children}</>;
 }
