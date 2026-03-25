@@ -8,9 +8,9 @@ const userSchema = new mongoose.Schema(
     firstName: { type: String, trim: true },
     lastName: { type: String, trim: true },
     phoneNumber: { type: String, trim: true },
-    profilePicture: { type: String, default: "" },
+    profileImage: { type: String, default: "" },
     city: { type: String, trim: true },
-    biography: { type: String, default: "Add bio" },
+    bio: { type: String, default: "Add bio" },
 
     isAdmin: { type: Boolean, default: false },
     isBlocked: { type: Boolean, default: false },
