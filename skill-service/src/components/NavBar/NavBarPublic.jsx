@@ -1,23 +1,33 @@
-import { Link } from "react-router-dom"
-import logo from "../../assets/logoSkillService.png"
-export default function NavBarPublic() {
+import { Link } from "react-router-dom";
+import logo from "../../assets/logoSkillService.png";
+import SearchBar from "../SearchBar/SearchBar";
 
+export default function NavBarPublic() {
     return (
         <>
-            <div className="navbar bg-base-100 shadow">
-                <div className="flex-1">
-                    <Link to="/" className="flex items-center gap-2">
-                        <img
-                            src={logo}
-                            alt="SkillService logo"
-                            className="h-20 w-auto"
-                        />
-                    </Link>
-                </div>
 
+            <div className="bg-base-100 shadow px-4 py-2">
+                <div className="grid grid-cols-[auto_1fr_auto] items-center gap-4">
 
-                    <div className="flex-none gap-2">
-                        <Link to='/signup' className="btn btn-primary btn-lg mr-4">
+                    {/* Logo */}
+                    <div>
+                        <Link to="/" className="flex items-center gap-2">
+                            <img
+                                src={logo}
+                                alt="SkillService logo"
+                                className="h-16 w-auto"
+                            />
+                        </Link>
+                    </div>
+
+                    {/* Search bar */}
+                    <div className="hidden md:flex justify-center">
+                        <SearchBar />
+                    </div>
+
+                    {/* Auth buttons */}
+                    <div className="flex items-center gap-2">
+                        <Link to="/signup" className="btn btn-primary btn-lg">
                             Sign up
                         </Link>
                         <Link to="/login" className="btn btn-primary btn-lg">
@@ -25,6 +35,7 @@ export default function NavBarPublic() {
                         </Link>
                     </div>
                 </div>
-                </>
-            )
+            </div>
+        </>
+    );
 }
