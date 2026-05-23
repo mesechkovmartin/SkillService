@@ -5,6 +5,7 @@ const postSchema = new mongoose.Schema(
         title: { type: String, required: true, trim: true },
         description: { type: String, required: true },
         category: { type: String, required: true, trim: true },
+        location: {type: String, required: true},
         ownerEmail: { type: String, required: true, trim: true, index: true },
         ownerPhoneNumber: { type: String, required: true, trim: true },
         ownerId: { type: String, required: true },
