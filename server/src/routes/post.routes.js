@@ -6,12 +6,14 @@ const router = express.Router();
 // Add new post
 router.post("/", async (req, res) => {
     try {
-        const { title, description, category, ownerEmail, ownerPhoneNumber, ownerId, price } = req.body;
+        console.log("POST BODY:", req.body);
+        const { title, description, category, location, ownerEmail, ownerPhoneNumber, ownerId, price } = req.body;
 
         const newPost = await Post.create({
             title,
             description,
             category,
+            location,
             ownerEmail,
             ownerPhoneNumber,
             ownerId,
@@ -64,19 +66,18 @@ router.put("/:id", async (req, res) => {
 
 // Delete post
 router.delete("/:id", async (req, res) => {
-    try {
-        await Post.findByIdAndDelete(req.params.id);
+  try {
+    const deletedPost = await Post.findByIdAndDelete(req.params.id);
 
-        if (!deletedPost) {
-            return res.status(404).json({ message: "Post not found" });
-        }
-
-        res.json({ message: "Post deleted" });
-    } catch (error) {
-        res.status(500).json({ message: "Error deleting post" });
+    if (!deletedPost) {
+      return res.status(404).json({ message: "Post not found" });
     }
-});
 
+    res.json({ message: "Post deleted" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting post" });
+  }
+});
 // Get single post by Id
 router.get("/:id", async (req, res) => {
     try {

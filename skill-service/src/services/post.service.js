@@ -1,0 +1,30 @@
+const BASE_URL = "http://localhost:4000/posts";
+
+// Get all posts
+export async function getAllPosts() {
+    const res = await fetch(BASE_URL);
+
+    if (!res.ok) {
+        throw new Error("Failed to fetch posts");
+    }
+
+    return res.json();
+}
+
+// Create post 
+
+export async function createPost(postData) {
+    const res = await fetch(BASE_URL, {
+        method: "POST",
+        headers: { 
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(postData)
+    })
+
+    if (!res.ok) {
+        throw new Error("Failed to create post");
+    }
+
+    return res.json();
+}
