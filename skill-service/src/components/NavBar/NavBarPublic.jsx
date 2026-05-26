@@ -27,10 +27,10 @@ export default function NavBarPublic() {
 
                     {/* Auth buttons */}
                     <div className="flex items-center gap-2">
-                        <Link to="/signup" className="btn btn-primary btn-lg">
+                        <Link to="/signup" className="btn btn-primary">
                             Sign up
                         </Link>
-                        <Link to="/login" className="btn btn-primary btn-lg">
+                        <Link to="/login" className="btn btn-primary btn-outline ">
                             Log in
                         </Link>
                     </div>
