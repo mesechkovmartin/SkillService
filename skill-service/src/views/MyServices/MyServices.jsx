@@ -1,7 +1,25 @@
 import NavBarPrivate from "../../components/NavBar/NavBarPrivate"
 import AddPostForm from "../../components/AddPostForm/AddPostForm"
+import { useEffect, useState } from "react"
+import PostCard from "../../components/PostCard/PostCard"
+import { auth } from "../../config/firebase.config.js"
+import  { getLoggedUserPosts } from "../../services/post.service"
 
 export default function MyServices() {
+
+    const [posts, setPosts] = useState([]);
+
+    useEffect(() => {
+        const user = auth.currentUser;
+
+        if(!user) return;
+
+        getLoggedUserPosts(user.email)
+        .then((data) => setPosts(data))
+        .catch((error) => console.error("Error fetching my posts:", error));   
+    }, []);
+
+
     return (
         <>
             <NavBarPrivate />
@@ -18,6 +36,16 @@ export default function MyServices() {
                         Add Service
                     </button>
                 </div>
+
+                {posts.length === 0 ? (
+                    <p>You have no services yet.</p>
+                ) : (
+                    <div className="grid gap-4 md:grid-cold-3">
+                        {posts.map((post) => (
+                            <PostCard key={post._id} post={post} variant="private" />
+                        ))}
+                    </div>
+                )}
 
                 <dialog id="add-post-modal" className="modal">
                     <div className="modal-box">

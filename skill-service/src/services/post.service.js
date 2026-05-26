@@ -12,7 +12,6 @@ export async function getAllPosts() {
 }
 
 // Create post 
-
 export async function createPost(postData) {
     const res = await fetch(BASE_URL, {
         method: "POST",
@@ -24,6 +23,19 @@ export async function createPost(postData) {
 
     if (!res.ok) {
         throw new Error("Failed to create post");
+    }
+
+    return res.json();
+}
+
+//Get logged user posts
+export async function getLoggedUserPosts(ownerEmail) {
+    const res = await fetch(
+        `${BASE_URL}/my-posts?ownerEmail=${ownerEmail}`
+    );
+
+    if (!res.ok) {
+        throw new Error("Failed to fetch my posts");
     }
 
     return res.json();
