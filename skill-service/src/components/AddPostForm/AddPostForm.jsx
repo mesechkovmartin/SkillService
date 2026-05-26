@@ -50,8 +50,10 @@ export default function appPostForm() {
             console.log("Created post: ", createdPost);
             alert("Post created successfully");
 
+            document.getElementById("add-post-modal").close();
+
             setFormData({
-                titte: "",
+                title: "",
                 description: "",
                 category: "",
                 location: "",
