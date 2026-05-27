@@ -3,20 +3,23 @@ import AddPostForm from "../../components/AddPostForm/AddPostForm"
 import { useEffect, useState } from "react"
 import PostCard from "../../components/PostCard/PostCard"
 import { auth } from "../../config/firebase.config.js"
-import  { getLoggedUserPosts } from "../../services/post.service"
+import { getLoggedUserPosts } from "../../services/post.service"
+import EditPostForm from "../../components/EditPostForm/EditPostForm"
 
 export default function MyServices() {
 
     const [posts, setPosts] = useState([]);
 
+    const [selectedPost, setSelectedPost] = useState(null);
+
     useEffect(() => {
         const user = auth.currentUser;
 
-        if(!user) return;
+        if (!user) return;
 
         getLoggedUserPosts(user.email)
-        .then((data) => setPosts(data))
-        .catch((error) => console.error("Error fetching my posts:", error));   
+            .then((data) => setPosts(data))
+            .catch((error) => console.error("Error fetching my posts:", error));
     }, []);
 
 
@@ -40,13 +43,28 @@ export default function MyServices() {
                 {posts.length === 0 ? (
                     <p>You have no services yet.</p>
                 ) : (
-                    <div className="grid gap-4 md:grid-cold-3">
+                    <div className="grid gap-4 md:grid-cols-3">
                         {posts.map((post) => (
-                            <PostCard key={post._id} post={post} variant="private" />
+                            <PostCard key={post._id} post={post} variant="private" onEdit={setSelectedPost} />
                         ))}
                     </div>
                 )}
 
+                {selectedPost && (
+                    <EditPostForm
+                        post={selectedPost}
+                        onClose={() => setSelectedPost(null)}
+                        onPostUpdated={(updatedPost) => {
+                            setPosts((oldPosts) =>
+                                oldPosts.map((post) =>
+                                    post._id === updatedPost._id ? updatedPost : post
+                                )
+                            );
+
+                            setSelectedPost(null);
+                        }}
+                    />
+                )}
                 <dialog id="add-post-modal" className="modal">
                     <div className="modal-box">
                         <h3 className="font-bold text-lg mb-4">Add Service</h3>

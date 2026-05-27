@@ -40,3 +40,19 @@ export async function getLoggedUserPosts(ownerEmail) {
 
     return res.json();
 }
+
+export async function updatePost(postId, postData) {
+    const res = await fetch(`${BASE_URL}/${postId}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(postData)
+    });
+
+    if (!res.ok) {
+        throw new Error("Failed to update post");
+    }
+
+    return res.json();
+}

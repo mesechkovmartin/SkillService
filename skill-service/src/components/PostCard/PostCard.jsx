@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { auth } from "../../config/firebase.config.js";
 
-export default function PostCard({ post, variant = "public" }) {
+export default function PostCard({ post, variant = "public", onEdit}) {
 
     const navigate = useNavigate();
 
@@ -47,7 +47,7 @@ export default function PostCard({ post, variant = "public" }) {
 
                 {showActions && (
                     <div className="card-actions justify-end mt-4">
-                        <button className="btn btn-sm btn-outline">
+                        <button className="btn btn-sm btn-outline" onClick={() => onEdit(post)}>
                             Edit
                         </button>
 

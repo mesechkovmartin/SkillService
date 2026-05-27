@@ -4,7 +4,7 @@ import { createPost } from "../../services/post.service";
 import { categories } from "../../constants/categories";
 import { cities } from "../../constants/cities";
 
-export default function appPostForm() {
+export default function AddPostForm() {
     const [formData, setFormData] = useState({
         title: "",
         description: "",
