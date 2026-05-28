@@ -32,7 +32,9 @@ export default function EditPostForm({ post, onClose, onPostUpdated }) {
             const updatedPost = await updatePost(post._id, updatedData);
 
             alert("Post updated successfully");
+            onPostUpdated(updatedPost);
             onClose();
+
         } catch (err) {
             console.error("Error updating post:", err);
             alert("Failed to update service");
