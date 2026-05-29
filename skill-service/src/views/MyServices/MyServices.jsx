@@ -45,7 +45,11 @@ export default function MyServices() {
                 ) : (
                     <div className="grid gap-4 md:grid-cols-3">
                         {posts.map((post) => (
-                            <PostCard key={post._id} post={post} variant="private" onEdit={setSelectedPost} />
+                            <PostCard key={post._id} post={post} variant="private" onEdit={setSelectedPost} onDelete={(postId) => {
+                                setPosts((oldPosts) =>
+                                    oldPosts.filter((post) => post._id !== postId)
+                                );
+                            }} />
                         ))}
                     </div>
                 )}
@@ -69,7 +73,9 @@ export default function MyServices() {
                     <div className="modal-box">
                         <h3 className="font-bold text-lg mb-4">Add Service</h3>
 
-                        <AddPostForm />
+                        <AddPostForm onPostCreated={(newPost) => {
+                            setPosts((oldPosts) => [newPost, ...oldPosts]);
+                        }} />
 
                         <div className="modal-action">
                             <form method="dialog">

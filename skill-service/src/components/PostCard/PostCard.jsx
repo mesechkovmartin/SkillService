@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { auth } from "../../config/firebase.config.js";
+import { deletePost } from "../../services/post.service.js";
 
-export default function PostCard({ post, variant = "public", onEdit}) {
+export default function PostCard({ post, variant = "public", onEdit, onDelete}) {
 
     const navigate = useNavigate();
 
@@ -20,7 +21,23 @@ export default function PostCard({ post, variant = "public", onEdit}) {
             return;
         }
 
-        navigate(`/posts/${posts._id}`);
+        navigate(`/posts/${post._id}`);
+    };
+
+    const handleDelete = async () => {
+        const confirmDelete = window.confirm("Are you sure you want to delete this service?");
+
+        if (!confirmDelete) return;
+
+        try {
+            await deletePost(post._id);
+            alert("Post deleted successfully");
+            if (onDelete) onDelete(post._id);
+            
+        } catch (err) {
+            console.error("Error deleting post", err);
+            alert("Failed to delete service");
+        }
     };
 
     return (
@@ -51,7 +68,7 @@ export default function PostCard({ post, variant = "public", onEdit}) {
                             Edit
                         </button>
 
-                        <button className="btn btn-sm btn-error">
+                        <button className="btn btn-sm btn-error" onClick={handleDelete}>
                             Delete
                         </button>
                     </div>

@@ -41,6 +41,7 @@ export async function getLoggedUserPosts(ownerEmail) {
     return res.json();
 }
 
+//Update post
 export async function updatePost(postId, postData) {
     const res = await fetch(`${BASE_URL}/${postId}`, {
         method: "PUT",
@@ -52,6 +53,19 @@ export async function updatePost(postId, postData) {
 
     if (!res.ok) {
         throw new Error("Failed to update post");
+    }
+
+    return res.json();
+}
+
+//Delete post
+export async function deletePost(postId) {
+    const res = await fetch(`${BASE_URL}/${postId}`, {
+        method: "DELETE"
+    });
+
+    if (!res.ok) {
+        throw new Error("Failed to delete post");
     }
 
     return res.json();

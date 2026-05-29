@@ -4,7 +4,7 @@ import { createPost } from "../../services/post.service";
 import { categories } from "../../constants/categories";
 import { cities } from "../../constants/cities";
 
-export default function AddPostForm() {
+export default function AddPostForm({onPostCreated}) {
     const [formData, setFormData] = useState({
         title: "",
         description: "",
@@ -46,6 +46,8 @@ export default function AddPostForm() {
 
         try {
             const createdPost = await createPost(postData);
+            
+            if (onPostCreated) onPostCreated(createdPost);
 
             console.log("Created post: ", createdPost);
             alert("Post created successfully");
