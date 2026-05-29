@@ -3,6 +3,7 @@ import { auth } from "../../config/firebase.config";
 import { createPost } from "../../services/post.service";
 import { categories } from "../../constants/categories";
 import { cities } from "../../constants/cities";
+import defaultPostImage from "../../assets/defaultPostImage.png";
 
 export default function AddPostForm({onPostCreated}) {
     const [formData, setFormData] = useState({
@@ -36,6 +37,7 @@ export default function AddPostForm({onPostCreated}) {
         const postData = {
             title: formData.title,
             description: formData.description,
+            imageUrl: defaultPostImage,
             category: formData.category,
             location: formData.location,
             ownerPhoneNumber: formData.ownerPhoneNumber,

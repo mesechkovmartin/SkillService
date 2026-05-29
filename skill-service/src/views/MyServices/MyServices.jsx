@@ -43,7 +43,7 @@ export default function MyServices() {
                 {posts.length === 0 ? (
                     <p>You have no services yet.</p>
                 ) : (
-                    <div className="grid gap-4 md:grid-cols-3">
+                    <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
                         {posts.map((post) => (
                             <PostCard key={post._id} post={post} variant="private" onEdit={setSelectedPost} onDelete={(postId) => {
                                 setPosts((oldPosts) =>

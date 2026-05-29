@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { auth } from "../../config/firebase.config.js";
 import { deletePost } from "../../services/post.service.js";
+import defaultPostImage from "../../assets/defaultPostImage.png";
 
 export default function PostCard({ post, variant = "public", onEdit, onDelete}) {
 
@@ -41,12 +42,14 @@ export default function PostCard({ post, variant = "public", onEdit, onDelete}) 
     };
 
     return (
-        <div className="card bg-base-100 shadow-md">
-            <div className="card-body">
+        <div className="card bg-base-100 shadow-md h-full">
+            <div className="card-body flex flex-col">
+
+                <img src={post.imageUrl || defaultPostImage} alt={post.title} className="w-full h-40 object-cover rounded-xl mb-4" />
 
                 <h2 className="card-title">{post.title}</h2>
 
-                <p>{post.description}</p>
+                <p className="line-clamp-3">{post.description}</p>
 
                 <p>Category: {post.category}</p>
 
@@ -63,7 +66,7 @@ export default function PostCard({ post, variant = "public", onEdit, onDelete}) 
                 )}
 
                 {showActions && (
-                    <div className="card-actions justify-end mt-4">
+                    <div className="card-actions justify-end mt-auto">
                         <button className="btn btn-sm btn-outline" onClick={() => onEdit(post)}>
                             Edit
                         </button>
