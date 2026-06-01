@@ -6,6 +6,7 @@ import HomePagePrivate from './views/HomePage/HomePagePrivate.jsx'
 import Login from './views/Login/Login.jsx'
 import Signup from './views/Signup/Signup.jsx'
 import NotFound from './components/NotFound/NotFound.jsx'
+import MyServices from './views/MyServices/MyServices.jsx'
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
         <Route path='/signup' element={<Signup />} />
         <Route path='*' element={<NotFound />} />
         <Route path='/home' element={<Authenticated><HomePagePrivate /></Authenticated>} />
+        <Route path='/my-services' element={<Authenticated><MyServices /></Authenticated>} />
        </Routes>
     </BrowserRouter> 
   )
