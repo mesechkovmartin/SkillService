@@ -12,7 +12,9 @@ export default function NavBarPrivate() {
     const { setAppState } = useContext(AppContext);
     const navigate = useNavigate();
 
-    const handleLogout = async () => {
+    const avatarLetter = user?.username?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || "U";
+
+    async function handleLogout() {
         try {
             await logoutUser(); //firebase logout
 
@@ -46,32 +48,32 @@ export default function NavBarPrivate() {
                     <SearchBar />
                 </div>
 
-            {/* User menu */}
-            <div  className="flex items-center gap-2">
-                <div className="dropdown dropdown-end">
-                    <div tabIndex={0} role="button" className="btn btn-ghost avatar">
-                        <div className="w-10 rounded-full bg-base-200 flex items-center justify-center">
-                            <span className="text-sm font-bold">
-                                {user?.username?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || "U"}
-                            </span>
+                {/* User menu */}
+                <div className="flex items-center gap-2">
+                    <div className="dropdown dropdown-end">
+                        <div tabIndex={0} role="button" className="btn btn-ghost avatar">
+                            <div className="w-10 rounded-full bg-base-200 flex items-center justify-center">
+                                <span className="text-sm font-bold">
+                                    {avatarLetter}
+                                </span>
+                            </div>
                         </div>
+
+                        <ul
+                            tabIndex={0}
+                            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow"
+                        >
+                            <li className="px-2 py-1 text-sm opacity-70">
+                                {user?.username || user?.email}
+                            </li>
+                            <li><Link to="/profile">Profile</Link></li>
+                            <li><Link to="/my-services">My Services</Link></li>
+                            <li><button onClick={handleLogout}>Logout</button></li>
+                        </ul>
                     </div>
 
-                    <ul
-                        tabIndex={0}
-                        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow"
-                    >
-                        <li className="px-2 py-1 text-sm opacity-70">
-                            {user?.username || user?.email}
-                        </li>
-                        <li><Link to="/profile">Profile</Link></li>
-                        <li><Link to="/my-services">My Services</Link></li>
-                        <li><button onClick={handleLogout}>Logout</button></li>
-                    </ul>
                 </div>
-
             </div>
-        </div>
 
         </div >
 

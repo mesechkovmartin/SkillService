@@ -24,4 +24,29 @@ router.get("/me", requireAuth, async (req, res) => {
     res.json(user);
 });
 
+
+router.put("/profile", requireAuth, async (req, res) => {
+    try {
+        const { uid } = req.firebaseUser;
+        const { username, bio, profileImage } = req.body;
+
+        const updatedUser = await User.findOneAndUpdate(
+            { firebaseUid: uid },
+            { username, bio, profileImage },
+            { new: true }
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        res.json(updatedUser);
+    } catch (error) {
+        res.status(500).json({ message: "Error updating profile" });      
+    }
+});
+
+
+
 export default router;
+

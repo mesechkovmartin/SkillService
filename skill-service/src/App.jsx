@@ -8,6 +8,7 @@ import Signup from './views/Signup/Signup.jsx'
 import NotFound from './components/NotFound/NotFound.jsx'
 import MyServices from './views/MyServices/MyServices.jsx'
 import PostDetails from './views/PostDetails/PostDetails.jsx'
+import Profile from './views/Profile/Profile.jsx'
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
         <Route path="/home" element={<Authenticated><HomePagePrivate /></Authenticated>} />
         <Route path="/my-services" element={<Authenticated><MyServices /></Authenticated>} />
         <Route path="/posts/:id" element ={<Authenticated><PostDetails /></Authenticated>} />
+        <Route path="/profile" element={<Authenticated><Profile /></Authenticated>} />
        </Routes>
     </BrowserRouter> 
   )

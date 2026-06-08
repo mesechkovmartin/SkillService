@@ -41,7 +41,7 @@ export default function PostDetails() {
 
                 <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
 
-                <p classsName="mb-4">{post.description}</p>
+                <p className="mb-4">{post.description}</p>
 
                 <p>Category: {post.category}</p>
                 <p>Location: {post.location}</p>
