@@ -70,3 +70,14 @@ export async function deletePost(postId) {
 
     return res.json();
 }
+
+//Get post by id
+export async function getPostById(postId) {
+    const res = await fetch(`${BASE_URL}/${postId}`);
+
+    if (!res.ok) {
+        throw new Error("Failed to fetch post details");
+    }
+
+    return res.json();
+}

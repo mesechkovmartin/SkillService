@@ -32,7 +32,7 @@ export default function HomePagePrivate() {
                         No services available at the moment. Please check back later.
                     </p>
                 ) : (
-                    <div className="grid gap-6 md:grid-cols-5">
+                    <div className="grid gap-5 md:grid-cols-5">
                         {posts.map((post) => (
                             <PostCard key={post._id} post={post} variant="public"/>
                         ))}

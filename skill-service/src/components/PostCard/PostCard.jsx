@@ -3,7 +3,7 @@ import { auth } from "../../config/firebase.config.js";
 import { deletePost } from "../../services/post.service.js";
 import defaultPostImage from "../../assets/defaultPostImage.png";
 
-export default function PostCard({ post, variant = "public", onEdit, onDelete}) {
+export default function PostCard({ post, variant = "public", onEdit, onDelete }) {
 
     const navigate = useNavigate();
 
@@ -15,15 +15,15 @@ export default function PostCard({ post, variant = "public", onEdit, onDelete}) 
 
     const showActions = isPrivate && isOwner;
 
-    const handleDetailsClick = () => {
-    
-        if (!user) {
+    const handleCardClick = () => {
+        const user = auth.currentUser;
+
+        if(!user) {
             navigate("/login");
             return;
         }
-
         navigate(`/posts/${post._id}`);
-    };
+    }
 
     const handleDelete = async () => {
         const confirmDelete = window.confirm("Are you sure you want to delete this service?");
@@ -34,7 +34,7 @@ export default function PostCard({ post, variant = "public", onEdit, onDelete}) 
             await deletePost(post._id);
             alert("Post deleted successfully");
             if (onDelete) onDelete(post._id);
-            
+
         } catch (err) {
             console.error("Error deleting post", err);
             alert("Failed to delete service");
@@ -42,7 +42,8 @@ export default function PostCard({ post, variant = "public", onEdit, onDelete}) 
     };
 
     return (
-        <div className="card bg-base-100 shadow-md h-full">
+        <div className="card bg-base-100 shadow-md h-full cursor-pointer hover:shadow-xl transition"
+            onClick={handleCardClick}>
             <div className="card-body flex flex-col">
 
                 <img src={post.imageUrl || defaultPostImage} alt={post.title} className="w-full h-40 object-cover rounded-xl mb-4" />
@@ -67,23 +68,21 @@ export default function PostCard({ post, variant = "public", onEdit, onDelete}) 
 
                 {showActions && (
                     <div className="card-actions justify-end mt-auto">
-                        <button className="btn btn-sm btn-outline" onClick={() => onEdit(post)}>
+                        <button className="btn btn-sm btn-outline" onClick={(e) => {
+                            e.stopPropagation();
+                            onEdit(post);
+                        }}>
                             Edit
                         </button>
 
-                        <button className="btn btn-sm btn-error" onClick={handleDelete}>
+                        <button className="btn btn-sm btn-error" onClick={(e) => {
+                            e.stopPropagation();
+                            handleDelete();
+                        }}>
                             Delete
                         </button>
                     </div>
 
-                )}
-
-                {!isPrivate && (
-                    <button className="btn btn-primary btn-sm mt-4"
-                        onClick={handleDetailsClick}
-                    >
-                        View Details
-                    </button>
                 )}
 
             </div>
