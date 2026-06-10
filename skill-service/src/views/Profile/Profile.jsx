@@ -1,11 +1,14 @@
 import { useContext, useState } from "react";
 import NavBarPrivate from "../../components/NavBar/NavBarPrivate";
 import { AppContext } from "../../store/app.context.js";
-import {auth} from "../../config/firebase.config.js";
+import { auth } from "../../config/firebase.config.js";
 import { updateProfile } from "../../services/user.service.js";
+import { uploadImageToCloudinary } from "../../services/cloudinary.service.js";
 
 export default function Profile() {
     const { user, setAppState } = useContext(AppContext);
+
+    const [selectedImage, setSelectedImage] = useState(null);
 
     const [formData, setFormData] = useState({
         username: user?.username || "",
@@ -24,15 +27,15 @@ export default function Profile() {
     }
 
     const avatarLetter =
-    user?.username?.[0]?.toUpperCase() ||
-    user?.email?.[0]?.toUpperCase() ||
-    "U";
+        user?.username?.[0]?.toUpperCase() ||
+        user?.email?.[0]?.toUpperCase() ||
+        "U";
 
     const handleChange = (e) => {
-       setFormData((oldData) => ({
-        ...oldData,
-        [e.target.name]: e.target.value
-       }));
+        setFormData((oldData) => ({
+            ...oldData,
+            [e.target.name]: e.target.value
+        }));
     };
 
     const handleSubmit = async (e) => {
@@ -41,81 +44,104 @@ export default function Profile() {
         try {
             const token = await auth.currentUser.getIdToken();
 
-            const updatedUser = await updateProfile(formData, token);
+            let profileImage = user.profileImage;
+
+            if (selectedImage) {
+                profileImage = await uploadImageToCloudinary(selectedImage);
+            }
+
+
+            const updatedUser = await updateProfile({
+                ...formData,
+                profileImage
+            },
+                token
+            );
 
             setAppState((oldState) => ({
                 ...oldState,
                 user: updatedUser
             }));
 
+            setSelectedImage(null);
+
             alert("Profile updated successfully");
         } catch (error) {
-            console.error("Error updating profile:", error);    
+            console.error("FULL ERROR:", error);
+            console.error("ERROR MESSAGE:", error.message);
+            console.error("Error updating profile:", error);
             alert("Failed to update profile");
         }
     };
 
     return (
         <>
-        <NavBarPrivate />
+            <NavBarPrivate />
 
-        <div className="p-6 max-w-3xl mx-auto">
-            <div className="card bg-base-100 shadow-md">
-                <div className="card-body items-center text-center">
+            <div className="p-6 max-w-3xl mx-auto">
+                <div className="card bg-base-100 shadow-md">
+                    <div className="card-body items-center text-center">
 
-                    {user.profileImage ? (
-                        <img
-                            src={user.profileImage}
-                            alt="Profile"
-                            className="w-28 h-28 rounded-full object-cover"
-                        />
-                    ) : (
-                        <div className="w-28 h-28 rounded-full bg-primary text-primary-content flex items-center justify-center text-4xl font-bold">
-                            {avatarLetter}
-                        </div>
-                    )}
+                        {user.profileImage ? (
+                            <img
+                                src={user.profileImage}
+                                alt="Profile"
+                                className="w-28 h-28 rounded-full object-cover"
+                            />
+                        ) : (
+                            <div className="w-28 h-28 rounded-full bg-primary text-primary-content flex items-center justify-center text-4xl font-bold">
+                                {avatarLetter}
+                            </div>
+                        )}
 
-                    <p className="text-gray-500 mt-3">{user.email}</p>
+                        <p className="text-gray-500 mt-3">{user.email}</p>
 
-                    <div className="divider"></div>
+                        <div className="divider"></div>
 
-                    <form onSubmit={handleSubmit} className="w-full space-y-4">
-                        <label className="form-control w-full text-left">
-                            <span className="label-text mb-1">Username</span>
+                        <form onSubmit={handleSubmit} className="w-full space-y-4">
+                            <label className="form-control w-full text-left">
+                                <span className="label-text mb-1">Username</span>
+                                <input
+                                    name="username"
+                                    type="text"
+                                    placeholder="Enter username"
+                                    className="input input-bordered w-full"
+                                    value={formData.username}
+                                    onChange={handleChange}
+                                />
+                            </label>
+
+                            <label className="form-control w-full text-left">
+                                <span className="label-text mb-1">Bio</span>
+                                <textarea
+                                    name="bio"
+                                    placeholder="Add bio"
+                                    className="textarea textarea-bordered w-full"
+                                    value={formData.bio}
+                                    onChange={handleChange}
+                                />
+                            </label>
+
                             <input
-                            name="username"
-                            type="text"
-                            placeholder="Enter username"
-                            className="input input-bordered w-full"
-                            value={formData.username}
-                            onChange={handleChange}
+                                type="file"
+                                accept="image/*"
+                                className="file-input file-input-bordered w-full"
+                                onChange={(e) => setSelectedImage(e.target.files[0])}
                             />
-                        </label>
 
-                        <label className="form-control w-full text-left">
-                            <span className="label-text mb-1">Bio</span>
-                            <textarea
-                            name="bio"
-                            placeholder="Add bio"
-                            className="textarea textarea-bordered w-full"
-                            value={formData.bio}
-                            onChange={handleChange}
-                            />
-                        </label>
+                            <button type="submit" className="btn btn-primary w-full">
+                                Save Changes
+                            </button>
 
-                        <button type="submit" className="btn btn-primary w-full">
-                            Save Changes
-                        </button>
+                        </form>
 
-                    </form>
-
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        
+
+
         </>
     )
 
-    
+
 }
