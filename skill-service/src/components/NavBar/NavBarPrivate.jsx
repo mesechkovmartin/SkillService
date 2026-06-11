@@ -10,6 +10,7 @@ export default function NavBarPrivate() {
     const { user } = useContext(AppContext);
 
     const { setAppState } = useContext(AppContext);
+    
     const navigate = useNavigate();
 
     const avatarLetter = user?.username?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || "U";
@@ -52,10 +53,18 @@ export default function NavBarPrivate() {
                 <div className="flex items-center gap-2">
                     <div className="dropdown dropdown-end">
                         <div tabIndex={0} role="button" className="btn btn-ghost avatar">
-                            <div className="w-10 rounded-full bg-base-200 flex items-center justify-center">
-                                <span className="text-sm font-bold">
-                                    {avatarLetter}
-                                </span>
+                            <div className="w-10 rounded-full overflow-hidden bg-base-200 flex items-center justify-center">
+                                {user?.profileImage ? (
+                                    <img
+                                        src={user.profileImage}
+                                        alt="Profile"
+                                        className="w-full h-full object-cover"
+                                    />
+                                ) : (
+                                    <span className="text-sm font-bold">
+                                        {avatarLetter}
+                                    </span>
+                                )}
                             </div>
                         </div>
 

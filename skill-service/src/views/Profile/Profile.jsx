@@ -10,6 +10,8 @@ export default function Profile() {
 
     const [selectedImage, setSelectedImage] = useState(null);
 
+    const [isSaving, setIsSaving] = useState(false);
+
     const [formData, setFormData] = useState({
         username: user?.username || "",
         bio: user?.bio || ""
@@ -43,6 +45,8 @@ export default function Profile() {
 
         if (!confirmed) return;
 
+        setIsSaving(true);
+
         try {
             const token = await auth.currentUser.getIdToken();
 
@@ -58,12 +62,16 @@ export default function Profile() {
         } catch (error) {
             console.error("Error deleting profile image:", error);
             alert("Failed to delete profile image");
+        } finally {
+            setIsSaving(false);
         }
     }
 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        setIsSaving(true);
 
         try {
             const token = await auth.currentUser.getIdToken();
@@ -105,12 +113,20 @@ export default function Profile() {
             console.error("ERROR MESSAGE:", error.message);
             console.error("Error updating profile:", error);
             alert("Failed to update profile");
+        } finally {
+            setIsSaving(false);
         }
     };
 
     return (
         <>
             <NavBarPrivate />
+
+            {isSaving && (
+                <div className="fixed inset-0 bg-white/70 flex items-center justify-center z-50">
+                    <span className="loading loading-spinner loading-lg text-blue-500"></span>
+                </div>
+            )}
 
             <div className="p-6 max-w-3xl mx-auto">
                 <div className="card bg-base-100 shadow-md">
@@ -138,12 +154,12 @@ export default function Profile() {
                             </button>
                         )}
 
-                         <input
-                                type="file"
-                                accept="image/*"
-                                className="file-input file-input-bordered w-full"
-                                onChange={(e) => setSelectedImage(e.target.files[0])}
-                            />
+                        <input
+                            type="file"
+                            accept="image/*"
+                            className="file-input file-input-bordered w-full"
+                            onChange={(e) => setSelectedImage(e.target.files[0])}
+                        />
 
                         <p className="text-gray-500 mt-3">{user.email}</p>
 
