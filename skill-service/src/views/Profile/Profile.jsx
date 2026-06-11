@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import NavBarPrivate from "../../components/NavBar/NavBarPrivate";
 import { AppContext } from "../../store/app.context.js";
 import { auth } from "../../config/firebase.config.js";
-import { updateProfile } from "../../services/user.service.js";
+import { updateProfile, deleteProfileImage } from "../../services/user.service.js";
 import { uploadImageToCloudinary } from "../../services/cloudinary.service.js";
 
 export default function Profile() {
@@ -37,6 +37,30 @@ export default function Profile() {
             [e.target.name]: e.target.value
         }));
     };
+
+    const handleDeleteProfileImage = async () => {
+        const confirmed = window.confirm("Are you sure you want to delete your profile image?");
+
+        if (!confirmed) return;
+
+        try {
+            const token = await auth.currentUser.getIdToken();
+
+            const updatedUser = await deleteProfileImage(token);
+
+            setAppState((oldState) => ({
+                ...oldState,
+                user: updatedUser
+            }));
+
+            alert("Profile image deleted successfully");
+
+        } catch (error) {
+            console.error("Error deleting profile image:", error);
+            alert("Failed to delete profile image");
+        }
+    }
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -104,6 +128,23 @@ export default function Profile() {
                             </div>
                         )}
 
+                        {user.profileImage && (
+                            <button
+                                type="button"
+                                className="btn btn-error btn-sm mt-3"
+                                onClick={handleDeleteProfileImage}
+                            >
+                                Delete Profile Picture
+                            </button>
+                        )}
+
+                         <input
+                                type="file"
+                                accept="image/*"
+                                className="file-input file-input-bordered w-full"
+                                onChange={(e) => setSelectedImage(e.target.files[0])}
+                            />
+
                         <p className="text-gray-500 mt-3">{user.email}</p>
 
                         <div className="divider"></div>
@@ -131,13 +172,6 @@ export default function Profile() {
                                     onChange={handleChange}
                                 />
                             </label>
-
-                            <input
-                                type="file"
-                                accept="image/*"
-                                className="file-input file-input-bordered w-full"
-                                onChange={(e) => setSelectedImage(e.target.files[0])}
-                            />
 
                             <button type="submit" className="btn btn-primary w-full">
                                 Save Changes

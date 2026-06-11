@@ -56,11 +56,39 @@ router.put("/profile", requireAuth, async (req, res) => {
             },
             { new: true }
         );
-        
+
         res.json(updatedUser);
     } catch (error) {
         console.error("Error updating profile:", error);
         res.status(500).json({ message: "Error updating profile" });
+    }
+});
+
+
+router.delete("/profile-image", requireAuth, async (req, res) => {
+    try {
+        const { uid } = req.firebaseUser;
+
+        const user = await User.findOne({ firebaseUid: uid });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        if (user.profileImagePublicId) {
+            await cloudinary.uploader.destroy(user.profileImagePublicId);
+        }
+
+        user.profileImage = "";
+        user.profileImagePublicId = "";
+
+        await user.save();
+
+        res.json(user);
+
+    } catch (error) {
+        console.error("Error deleting profile image:", error);
+        res.status(500).json({ message: "Error deleting profile image" });
     }
 });
 

@@ -1,7 +1,7 @@
 const BASE_URL = "http://localhost:4000/auth";
 
 // Update user profile
-export  async function updateProfile(profileData, token) {
+export async function updateProfile(profileData, token) {
     const res = await fetch(`${BASE_URL}/profile`, {
         method: "PUT",
         headers: {
@@ -16,4 +16,20 @@ export  async function updateProfile(profileData, token) {
     }
     return res.json();
 
+}
+
+// Delete user profile image
+export async function deleteProfileImage(token) {
+    const res = await fetch(`${BASE_URL}/profile-image`, {
+        method: "DELETE",
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+
+    if (!res.ok) {
+        throw new Error("Failed to delete profile image");
+    }
+
+    return res.json();
 }
