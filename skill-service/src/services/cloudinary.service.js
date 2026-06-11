@@ -7,7 +7,7 @@ export async function uploadImageToCloudinary(file) {
     formData.append("file", file);
     formData.append("upload_preset", uploadPreset);
 
-    const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, {
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
         method: "POST",
         body: formData,
     });
@@ -18,5 +18,8 @@ export async function uploadImageToCloudinary(file) {
 
     const data = await res.json();
 
-    return data.secure_url;
+    return {
+        imageUrl: data.secure_url,
+        publicId: data.public_id
+    };
 }

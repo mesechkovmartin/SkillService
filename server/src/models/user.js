@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema(
     lastName: { type: String, trim: true },
     phoneNumber: { type: String, trim: true },
     profileImage: { type: String, default: "" },
+    profileImagePublicId: { type: String, default: "" },
     city: { type: String, trim: true },
     bio: { type: String, default: "Add bio" },
 

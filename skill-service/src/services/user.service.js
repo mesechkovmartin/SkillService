@@ -12,7 +12,7 @@ export  async function updateProfile(profileData, token) {
     });
 
     if (!res.ok) {
-        throw new error("Failed to update  profile");
+        throw new Error("Failed to update  profile");
     }
     return res.json();
 

@@ -45,16 +45,26 @@ export default function Profile() {
             const token = await auth.currentUser.getIdToken();
 
             let profileImage = user.profileImage;
+            let profileImagePublicId = user.profileImagePublicId;
 
             if (selectedImage) {
-                profileImage = await uploadImageToCloudinary(selectedImage);
+
+                const uploadedImage = await uploadImageToCloudinary(selectedImage);
+
+                profileImage = uploadedImage.imageUrl;
+                profileImagePublicId = uploadedImage.publicId;
+
             }
 
 
-            const updatedUser = await updateProfile({
+            const profileData = {
                 ...formData,
-                profileImage
-            },
+                profileImage,
+                profileImagePublicId
+            };
+
+            const updatedUser = await updateProfile(
+                profileData,
                 token
             );
 
