@@ -9,6 +9,8 @@ export default function PostDetails() {
 
     const [post, setPost] = useState(null);
 
+    const [selectedImage, setSelectedImage] = useState(null);
+
     useEffect(() => {
 
         getPostById(id)
@@ -29,15 +31,21 @@ export default function PostDetails() {
 
     return (
         <>
-
             <NavBarPrivate />
 
             <div className="p-6 max-w-3xl mx-auto">
-                <img
-                    src={post.imageUrl || defaultPostImage}
-                    alt={post.title}
-                    className="w-full h-80 object-cover rounded-xl mb-6"
-                />
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-9">
+                    {(post.images?.length > 0 ? post.images : [{ url: defaultPostImage }]).map((image, index) => (
+                        <img
+                            key={index}
+                            src={image.url}
+                            alt={`${post.title} ${index + 1}`}
+                            className="w-full h-48 object-cover cursor-pointer transition-all duration-300 hover:scale-110 hover:brightness-110 rounded"
+                            onClick={() => setSelectedImage(image.url)}
+                        />
+                    ))}
+
+                </div>
 
                 <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
 
@@ -49,8 +57,20 @@ export default function PostDetails() {
                 <p className="font-semibold">Price: {post.price} EUR</p>
             </div>
 
+            {selectedImage && (
+                <div
+                    className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50"
+                    onClick={() => setSelectedImage(null)}
+                >
+                    <img
+                        src={selectedImage}
+                        alt="Full size"
+                        className="max-w-[90vw] max-h-[90vh] rounded-xl"
+                        onClick={(e) => e.stopPropagation()}
+                    />
+                </div>
+            )}
         </>
     )
-
 
 }
