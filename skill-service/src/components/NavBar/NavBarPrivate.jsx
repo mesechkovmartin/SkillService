@@ -17,7 +17,7 @@ export default function NavBarPrivate() {
 
     async function handleLogout() {
         try {
-            await logoutUser(); //firebase logout
+            await logoutUser();
 
             setAppState({
                 user: null,

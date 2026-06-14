@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { updatePost } from "../../services/post.service";
 import { categories } from "../../constants/categories";
 import { cities } from "../../constants/cities";
+import { uploadImageToCloudinary } from "../../services/cloudinary.service.js";
 
 export default function EditPostForm({ post, onClose, onPostUpdated }) {
     const [formData, setFormData] = useState({
@@ -13,6 +14,10 @@ export default function EditPostForm({ post, onClose, onPostUpdated }) {
         price: post.price
     });
 
+    const [existingImages, setExistingImages] = useState(post.images || []);
+    const [newImages, setNewImages] = useState([]);
+    const [removedImages, setRemovedImages] = useState([]);
+
     const handleChange = (e) => {
         setFormData((oldData) => ({
             ...oldData,
@@ -20,15 +25,42 @@ export default function EditPostForm({ post, onClose, onPostUpdated }) {
         }));
     };
 
+    const handleRemoveExistingImage = (imageToRemove) => {
+        setExistingImages((oldImages) => oldImages.filter((image) => image.publicId !== imageToRemove.publicId));
+
+        setRemovedImages((oldImages) => [...oldImages, imageToRemove]);
+    }
+
+    const handleRemoveNewImage = (indexToRemove) => {
+        setNewImages((oldImages) => oldImages.filter((_, index) => index !== indexToRemove));
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const updatedData = {
-            ...formData,
-            price: Number(formData.price)
-        };
-
         try {
+            let uploadedNewImages = [];
+
+            if (newImages.length > 0) {
+                uploadedNewImages = await Promise.all(
+                    newImages.map((image) => uploadImageToCloudinary(image))
+                );
+            }
+
+            const formattedNewImages = uploadedNewImages.map((image) => ({
+                url: image.imageUrl,
+                publicId: image.publicId
+            }));
+
+            const finalImages = [...existingImages, ...formattedNewImages];
+
+            const updatedData = {
+                ...formData,
+                price: Number(formData.price),
+                images: finalImages,
+                removedImages: removedImages
+            };
+
             const updatedPost = await updatePost(post._id, updatedData);
 
             alert("Post updated successfully");
@@ -40,10 +72,17 @@ export default function EditPostForm({ post, onClose, onPostUpdated }) {
             alert("Failed to update service");
         }
     };
+    useEffect(() => {
+        document.body.style.overflow = "hidden";
+
+        return () => {
+            document.body.style.overflow = "auto";
+        };
+    }, []);
 
     return (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-base-100 p-6 rounded-xl w-full max-w-lg">
+            <div className="bg-base-100 p-6 rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
                 <h2 className="text-2xl font-bold mb-4">Edit Service</h2>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -54,6 +93,66 @@ export default function EditPostForm({ post, onClose, onPostUpdated }) {
                         value={formData.title}
                         onChange={handleChange}
                         required
+                    />
+
+                    <div className="grid grid-cols-3 gap-2">
+                        {existingImages.map((image) => (
+                            <div key={image.publicId} className="relative group">
+                                <img
+                                    src={image.url}
+                                    alt="Post"
+                                    className="h-24 w-full object-cover rounded-xl"
+                                />
+
+                                <button
+                                    type="button"
+                                    className="btn btn-circle btn-xs btn-error absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition"
+                                    onClick={() => handleRemoveExistingImage(image)}
+                                >
+                                    ✕
+                                </button>
+                            </div>
+                        ))}
+
+                        {newImages.map((image, index) => (
+                            <div key={index} className="relative group">
+                                <img
+                                    src={URL.createObjectURL(image)}
+                                    alt="New preview"
+                                    className="h-24 w-full object-cover rounded-xl"
+                                />
+
+                                <button
+                                    type="button"
+                                    className="btn btn-circle btn-xs btn-error absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition"
+                                    onClick={() => handleRemoveNewImage(index)}
+                                >
+                                    ✕
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+
+                    <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={(e) => {
+                            const files = Array.from(e.target.files);
+
+                            setNewImages((oldImages) => {
+                                const updatedImages = [...oldImages, ...files];
+
+                                if (existingImages.length + updatedImages.length > 10) {
+                                    alert("You can upload up to 10 photos.");
+                                    return oldImages;
+                                }
+
+                                return updatedImages;
+                            });
+
+                            e.target.value = null;
+                        }}
                     />
 
                     <textarea

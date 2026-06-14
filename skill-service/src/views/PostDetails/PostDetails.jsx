@@ -9,7 +9,9 @@ export default function PostDetails() {
 
     const [post, setPost] = useState(null);
 
-    const [selectedImage, setSelectedImage] = useState(null);
+    const [selectedImageIndex, setSelectedImageIndex] = useState(null);
+
+    const displayImages = post?.images?.length > 0 ? post.images : [{ url: defaultPostImage }];
 
     useEffect(() => {
 
@@ -35,13 +37,13 @@ export default function PostDetails() {
 
             <div className="p-6 max-w-3xl mx-auto">
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-9">
-                    {(post.images?.length > 0 ? post.images : [{ url: defaultPostImage }]).map((image, index) => (
+                    {displayImages.map((image, index) => (
                         <img
                             key={index}
                             src={image.url}
                             alt={`${post.title} ${index + 1}`}
                             className="w-full h-48 object-cover cursor-pointer transition-all duration-300 hover:scale-110 hover:brightness-110 rounded"
-                            onClick={() => setSelectedImage(image.url)}
+                            onClick={() => setSelectedImageIndex(index)}
                         />
                     ))}
 
@@ -57,17 +59,45 @@ export default function PostDetails() {
                 <p className="font-semibold">Price: {post.price} EUR</p>
             </div>
 
-            {selectedImage && (
+            {selectedImageIndex !== null && (
                 <div
-                    className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50"
-                    onClick={() => setSelectedImage(null)}
+                    className="fixed inset-0 bg-neutral/70 backdrop-blur-sm flex items-center justify-center z-50"
+                    onClick={() => setSelectedImageIndex(null)}
                 >
+                    {displayImages.length > 1 && (
+                        <button
+                            className="btn btn-circle absolute left-6"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedImageIndex((oldIndex) =>
+                                    oldIndex === 0 ? displayImages.length - 1 : oldIndex - 1
+                                );
+                            }}
+                        >
+                            ❮
+                        </button>
+                    )}
+
                     <img
-                        src={selectedImage}
+                        src={displayImages[selectedImageIndex].url}
                         alt="Full size"
                         className="max-w-[90vw] max-h-[90vh] rounded-xl"
                         onClick={(e) => e.stopPropagation()}
                     />
+
+                    {displayImages.length > 1 && (
+                        <button
+                            className="btn btn-circle absolute right-6"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedImageIndex((oldIndex) =>
+                                    oldIndex === displayImages.length - 1 ? 0 : oldIndex + 1
+                                );
+                            }}
+                        >
+                            ❯
+                        </button>
+                    )}
                 </div>
             )}
         </>

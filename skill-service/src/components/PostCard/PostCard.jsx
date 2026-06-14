@@ -18,7 +18,7 @@ export default function PostCard({ post, variant = "public", onEdit, onDelete })
     const handleCardClick = () => {
         const user = auth.currentUser;
 
-        if(!user) {
+        if (!user) {
             navigate("/login");
             return;
         }
@@ -46,7 +46,11 @@ export default function PostCard({ post, variant = "public", onEdit, onDelete })
             onClick={handleCardClick}>
             <div className="card-body flex flex-col">
 
-                <img src={post.imageUrl || defaultPostImage} alt={post.title} className="w-full h-40 object-cover rounded-xl mb-4" />
+                <img
+                    src={post.images?.[0]?.url || defaultPostImage}
+                    alt={post.title}
+                    className="w-full h-40 object-cover rounded-xl mb-4"
+                />
 
                 <h2 className="card-title">{post.title}</h2>
 
