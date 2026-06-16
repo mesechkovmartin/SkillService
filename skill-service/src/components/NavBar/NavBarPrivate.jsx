@@ -1,6 +1,6 @@
 import logo from '../../assets/logoSkillService.png';
 import { Link } from 'react-router-dom';
-import { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { AppContext } from '../../store/app.context';
 import { logoutUser } from '../../services/auth.service';
 import { useNavigate } from 'react-router-dom';
@@ -14,6 +14,28 @@ export default function NavBarPrivate() {
     const navigate = useNavigate();
 
     const avatarLetter = user?.username?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || "U";
+
+    const [showNavbar, setShowNavbar] = useState(true);
+
+    useEffect(() => {
+        let lastScrollY = window.scrollY;
+
+        const handleScroll = () => {
+            if (window.scrollY > lastScrollY && window.scrollY > 100) {
+                //scrolling down
+                setShowNavbar(false);
+            } else {
+                //scrolling up
+                setShowNavbar(true);
+            }
+            lastScrollY = window.scrollY;
+        };
+
+        window.addEventListener("scroll", handleScroll);
+
+        return () =>
+            window.removeEventListener("scroll", handleScroll);
+    }, []);
 
     async function handleLogout() {
         try {
@@ -30,7 +52,7 @@ export default function NavBarPrivate() {
     }
 
     return (
-        <div className="bg-base-100 shadow px-4 py-2">
+        <div className={`fixed top-0 left-0 right-0 z-50 bg-base-100 shadow px-4 py-2 transition-transform duration-300 ${showNavbar ? "translate-y-0" : "-translate-y-full"}`}>
             <div className="grid grid-cols-[auto_1fr_auto] items-center gap-4">
 
                 {/* Logo */}

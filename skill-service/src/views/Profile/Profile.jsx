@@ -128,7 +128,7 @@ export default function Profile() {
                 </div>
             )}
 
-            <div className="p-6 max-w-3xl mx-auto">
+            <div className="pt-24 p-6 max-w-3xl mx-auto">
                 <div className="card bg-base-100 shadow-md">
                     <div className="card-body items-center text-center">
 

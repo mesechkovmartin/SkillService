@@ -19,7 +19,7 @@ export default function HomePagePrivate() {
         <>
             <NavBarPrivate />
 
-            <div className="p-6">
+            <div className="pt-24 p-6">
 
                 <div className="text-center mb-10">
                     <h2 className="text-2xl font-bold">

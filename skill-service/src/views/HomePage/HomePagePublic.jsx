@@ -23,7 +23,7 @@ export default function HomePagePublic() {
         <>
             <NavBarPublic />
 
-            <div className="p-6">
+            <div className="pt-24 p-6">
 
                 <div className="text-center mb-10">
                     <h1 className="text-4xl font-bold mb-4">
