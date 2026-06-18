@@ -12,9 +12,12 @@ export default function HomePagePublic() {
 
     const [selectedCategory, setSelectedCategory] = useState(null);
 
+//CityInput only for the select.
+// cityResult for filtering.
     const [searchInput, setSearchInput] = useState("");
     const [searchResult, setSearchResult] = useState("");
     const [cityInput, setCityInput] = useState("");
+    const [cityResult, setCityResult] = useState("");
 
     const [hasSearched, setHasSearched] = useState(false);
 
@@ -33,8 +36,8 @@ export default function HomePagePublic() {
             post.category.toLowerCase().includes(search)
             : true;
 
-        const matchesCity = cityInput
-            ? post.location === cityInput
+        const matchesCity = cityResult
+            ? post.location === cityResult
             : true;
 
         return matchesSearch && matchesCity;
@@ -69,6 +72,7 @@ export default function HomePagePublic() {
                     setCityInput={setCityInput}
                     onSearch={(value) => {
                         setSearchResult(value);
+                        setCityResult(cityInput);
                         setHasSearched(true);
                         setSelectedCategory(null);
                     }}
