@@ -6,6 +6,7 @@ import PostCard from "../../components/PostCard/PostCard"
 import { categories } from "../../constants/categories"
 import CategoryCard from "../../components/CategoryCard/CategoryCard"
 import HeroSearch from "../../components/HeroSearch/HeroSearch"
+import Footer from "../../components/Footer/Footer"
 
 export default function HomePagePrivate() {
     const { user } = useContext(AppContext);
@@ -63,18 +64,20 @@ export default function HomePagePrivate() {
                     </h2>
                 </div>
 
-                <HeroSearch
-                    searchInput={searchInput}
-                    setSearchInput={setSearchInput}
-                    cityInput={cityInput}
-                    setCityInput={setCityInput}
-                    onSearch={(value) => {
-                        setSearchResult(value);
-                        setCityResult(cityInput);
-                        setHasSearched(true);
-                        setSelectedCategory(null);
-                    }}
-                />
+                <div id="hero-search" className="scroll-mt-24">
+                    <HeroSearch
+                        searchInput={searchInput}
+                        setSearchInput={setSearchInput}
+                        cityInput={cityInput}
+                        setCityInput={setCityInput}
+                        onSearch={(value) => {
+                            setSearchResult(value);
+                            setCityResult(cityInput);
+                            setHasSearched(true);
+                            setSelectedCategory(null);
+                        }}
+                    />
+                </div>
 
                 {hasSearched && (
                     <>
@@ -191,6 +194,8 @@ export default function HomePagePrivate() {
                 )}
 
             </div>
+
+            <Footer />
         </>
     )
 }

@@ -6,6 +6,7 @@ import { categories } from '../../constants/categories';
 import CategoryCard from '../../components/CategoryCard/CategoryCard';
 import HeroSearch from '../../components/HeroSearch/HeroSearch';
 import HowItWorks from '../../components/HowItWorks/HowItWorks';
+import Footer from '../../components/Footer/Footer';
 
 export default function HomePagePublic() {
 
@@ -13,8 +14,8 @@ export default function HomePagePublic() {
 
     const [selectedCategory, setSelectedCategory] = useState(null);
 
-//CityInput only for the select.
-// cityResult for filtering.
+    //CityInput only for the select.
+    // cityResult for filtering.
     const [searchInput, setSearchInput] = useState("");
     const [searchResult, setSearchResult] = useState("");
     const [cityInput, setCityInput] = useState("");
@@ -66,18 +67,20 @@ export default function HomePagePublic() {
                     </p>
                 </div>
 
-                <HeroSearch
-                    searchInput={searchInput}
-                    setSearchInput={setSearchInput}
-                    cityInput={cityInput}
-                    setCityInput={setCityInput}
-                    onSearch={(value) => {
-                        setSearchResult(value);
-                        setCityResult(cityInput);
-                        setHasSearched(true);
-                        setSelectedCategory(null);
-                    }}
-                />
+                <div id="hero-search" className="scroll-mt-24">
+                    <HeroSearch
+                        searchInput={searchInput}
+                        setSearchInput={setSearchInput}
+                        cityInput={cityInput}
+                        setCityInput={setCityInput}
+                        onSearch={(value) => {
+                            setSearchResult(value);
+                            setCityResult(cityInput);
+                            setHasSearched(true);
+                            setSelectedCategory(null);
+                        }}
+                    />
+                </div>
 
                 {hasSearched && (
                     <>
@@ -196,6 +199,8 @@ export default function HomePagePublic() {
             </div>
 
             <HowItWorks />
+
+            <Footer />
 
         </>
     );
