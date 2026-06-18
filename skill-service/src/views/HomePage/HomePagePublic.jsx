@@ -4,6 +4,7 @@ import { getAllPosts } from '../../services/post.service';
 import PostCard from '../../components/PostCard/PostCard';
 import { categories } from '../../constants/categories';
 import CategoryCard from '../../components/CategoryCard/CategoryCard';
+import HeroSearch from '../../components/HeroSearch/HeroSearch';
 
 export default function HomePagePublic() {
 
@@ -11,7 +12,11 @@ export default function HomePagePublic() {
 
     const [selectedCategory, setSelectedCategory] = useState(null);
 
-    const filteredPosts = selectedCategory ? posts.filter(post => post.category === selectedCategory) : posts;
+    const [searchInput, setSearchInput] = useState("");
+    const [searchResult, setSearchResult] = useState("");
+    const [cityInput, setCityInput] = useState("");
+
+    const [hasSearched, setHasSearched] = useState(false);
 
     useEffect(() => {
         getAllPosts()
@@ -19,12 +24,34 @@ export default function HomePagePublic() {
             .catch((error) => console.error("Error fetching posts:", error));
     }, []);
 
+    const searchFilteredPosts = posts.filter((post) => {
+        const search = searchResult.trim().toLowerCase();
+
+        const matchesSearch = search
+            ? post.title.toLowerCase().includes(search) ||
+            post.description.toLowerCase().includes(search) ||
+            post.category.toLowerCase().includes(search)
+            : true;
+
+        const matchesCity = cityInput
+            ? post.location === cityInput
+            : true;
+
+        return matchesSearch && matchesCity;
+    });
+
+    const categoryFilteredPosts = selectedCategory
+        ? posts.filter((post) => post.category === selectedCategory)
+        : [];
+
+    // Until i make rating system
+    const featuredPosts = posts.slice(0, 5);
+
     return (
         <>
             <NavBarPublic />
 
             <div className="pt-24 p-6">
-
                 <div className="text-center mb-10">
                     <h1 className="text-4xl font-bold mb-4">
                         Skill Service
@@ -34,6 +61,46 @@ export default function HomePagePublic() {
                         Connect with local experts and find the help you need
                     </p>
                 </div>
+
+                <HeroSearch
+                    searchInput={searchInput}
+                    setSearchInput={setSearchInput}
+                    cityInput={cityInput}
+                    setCityInput={setCityInput}
+                    onSearch={(value) => {
+                        setSearchResult(value);
+                        setHasSearched(true);
+                        setSelectedCategory(null);
+                    }}
+                />
+
+                {hasSearched && (
+                    <>
+                        <div className="text-center mb-10">
+                            <h1 className="text-4xl font-bold mb-4">
+                                Search Results
+                            </h1>
+                        </div>
+
+                        {searchFilteredPosts.length === 0 ? (
+                            <p className="text-center">
+                                No services found.
+                            </p>
+                        ) : (
+                            <div className="grid gap-5 md:grid-cols-5 mb-10">
+                                {searchFilteredPosts.map((post) => (
+                                    <PostCard
+                                        key={post._id}
+                                        post={post}
+                                        variant="public"
+                                    />
+                                ))}
+                            </div>
+                        )}
+
+                        <div className="divider"></div>
+                    </>
+                )}
 
                 <div className="text-center mb-10">
                     <h1 className="text-4xl font-bold mb-4">
@@ -57,30 +124,61 @@ export default function HomePagePublic() {
                                 } else {
                                     setSelectedCategory(category);
                                 }
+
+                                setSearchInput("");
+                                setSearchResult("");
+                                setCityInput("");
+                                setHasSearched(false);
                             }}
                         />
                     ))}
                 </div>
 
-                 <div className="divider"></div>
+                {selectedCategory && (
+                    <>
+                        <div className="text-center mb-10">
+                            <h1 className="text-4xl font-bold mb-4">
+                                {selectedCategory} Services
+                            </h1>
+                        </div>
 
-                 <div className="text-center mb-10">
+                        {categoryFilteredPosts.length === 0 ? (
+                            <p className="text-center">
+                                No services available in this category.
+                            </p>
+                        ) : (
+                            <div className="grid gap-5 md:grid-cols-5 mb-10">
+                                {categoryFilteredPosts.map((post) => (
+                                    <PostCard
+                                        key={post._id}
+                                        post={post}
+                                        variant="public"
+                                    />
+                                ))}
+                            </div>
+                        )}
+
+                        <div className="divider"></div>
+                    </>
+                )}
+
+                <div className="text-center mb-10">
                     <h1 className="text-4xl font-bold mb-4">
                         Featured Services
                     </h1>
 
                     <p className="text-lg text-gray-500">
-                        Top-rated professionals rigth now
+                        Top-rated professionals right now
                     </p>
                 </div>
 
-                {filteredPosts.length === 0 ? (
+                {featuredPosts.length === 0 ? (
                     <p className="text-center">
-                        No services available in this category.
+                        No featured services available yet.
                     </p>
                 ) : (
                     <div className="grid gap-5 md:grid-cols-5">
-                        {filteredPosts.map((post) => (
+                        {featuredPosts.map((post) => (
                             <PostCard
                                 key={post._id}
                                 post={post}
