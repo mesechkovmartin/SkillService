@@ -5,6 +5,7 @@ import PostCard from '../../components/PostCard/PostCard';
 import { categories } from '../../constants/categories';
 import CategoryCard from '../../components/CategoryCard/CategoryCard';
 import HeroSearch from '../../components/HeroSearch/HeroSearch';
+import HowItWorks from '../../components/HowItWorks/HowItWorks';
 
 export default function HomePagePublic() {
 
@@ -193,6 +194,8 @@ export default function HomePagePublic() {
                 )}
 
             </div>
+
+            <HowItWorks />
 
         </>
     );
