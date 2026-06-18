@@ -3,11 +3,17 @@ import { AppContext } from "../../store/app.context"
 import NavBarPrivate from "../../components/NavBar/NavBarPrivate"
 import { getAllPosts } from "../../services/post.service"
 import PostCard from "../../components/PostCard/PostCard"
+import { categories } from "../../constants/categories"
+import CategoryCard from "../../components/CategoryCard/CategoryCard"
 
 export default function HomePagePrivate() {
     const { user } = useContext(AppContext);
 
     const [posts, setPosts] = useState([]);
+
+    const [selectedCategory, setSelectedCategory] = useState(null);
+
+    const filteredPosts = selectedCategory ? posts.filter(post => post.category === selectedCategory) : posts;
 
     useEffect(() => {
         getAllPosts()
@@ -27,14 +33,38 @@ export default function HomePagePrivate() {
                     </h2>
                 </div>
 
-                {posts.length === 0 ? (
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-5 mb-10">
+                    {categories.map((category) => (
+                        <CategoryCard
+                            key={category}
+                            category={category}
+                            selectedCategory={selectedCategory}
+                            onSelect={(category) => {
+                                if (selectedCategory === category) {
+                                    setSelectedCategory(null);
+                                } else {
+                                    setSelectedCategory(category);
+                                }
+                            }}
+                        />
+                    ))}
+                </div>
+
+                <div className="divider"></div>
+
+
+                {filteredPosts.length === 0 ? (
                     <p className="text-center">
-                        No services available at the moment. Please check back later.
+                        No services available in this category.
                     </p>
                 ) : (
                     <div className="grid gap-5 md:grid-cols-5">
-                        {posts.map((post) => (
-                            <PostCard key={post._id} post={post} variant="public"/>
+                        {filteredPosts.map((post) => (
+                            <PostCard
+                                key={post._id}
+                                post={post}
+                                variant="public"
+                            />
                         ))}
                     </div>
                 )}

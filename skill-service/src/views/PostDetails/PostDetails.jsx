@@ -24,7 +24,7 @@ export default function PostDetails() {
         return (
             <>
                 <NavBarPrivate />
-                <div className="p-6 text-center">
+                <div className="pt-24 p-6 text-center">
                     <span className="loading loading-spinner loading-lg"></span>
                 </div>
             </>
@@ -35,7 +35,7 @@ export default function PostDetails() {
         <>
             <NavBarPrivate />
 
-            <div className="p-6 max-w-3xl mx-auto">
+            <div className="pt-24 p-6 max-w-3xl mx-auto">
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-9">
                     {displayImages.map((image, index) => (
                         <img
