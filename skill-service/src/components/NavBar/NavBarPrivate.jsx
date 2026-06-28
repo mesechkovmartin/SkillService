@@ -4,7 +4,6 @@ import { useContext, useState, useEffect } from 'react';
 import { AppContext } from '../../store/app.context';
 import { logoutUser } from '../../services/auth.service';
 import { useNavigate } from 'react-router-dom';
-import SearchBar from '../SearchBar/SearchBar';
 
 export default function NavBarPrivate() {
     const { user } = useContext(AppContext);
@@ -64,11 +63,6 @@ export default function NavBarPrivate() {
                             className="h-16 w-auto"
                         />
                     </Link>
-                </div>
-
-                {/* Search bar */}
-                <div className="hidden md:flex justify-center">
-                    <SearchBar />
                 </div>
 
                 {/* User menu */}

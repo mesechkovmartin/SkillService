@@ -67,7 +67,8 @@ export default function HomePagePublic() {
                     </p>
                 </div>
 
-                <div id="hero-search" className="scroll-mt-24">
+                {/* Hero Search Section */}
+                <div id="hero-search" className="scroll-mt-60">
                     <HeroSearch
                         searchInput={searchInput}
                         setSearchInput={setSearchInput}
@@ -110,7 +111,8 @@ export default function HomePagePublic() {
                     </>
                 )}
 
-                <div className="text-center mb-10">
+                {/* Categories Section */}
+                <div id="categories" className="text-center mb-10 scroll-mt-10">
                     <h1 className="text-4xl font-bold mb-4">
                         Browse Categories
                     </h1>
@@ -198,7 +200,10 @@ export default function HomePagePublic() {
 
             </div>
 
-            <HowItWorks />
+            {/* How It Works Section */}
+            <div id="how-it-works">
+                <HowItWorks />
+            </div>
 
             <Footer />
 

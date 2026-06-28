@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import logo from "../../assets/logoSkillService.png";
-import SearchBar from "../SearchBar/SearchBar";
 import { useState, useEffect } from "react";
 
 export default function NavBarPublic() {
@@ -29,7 +28,7 @@ export default function NavBarPublic() {
     return (
         <>
 
-            <div className={`fixed top-0 left-0 right-0 z-50 bg-base-100 shadow px-4 py-2 transition-transform duration-300 ${showNavbar ? "translate-y-0" : "-translate-y-full"}`}>
+            <div className={`fixed top-0 left-0 right-0 z-50 bg-base-100  shadow px-4 py-2 transition-transform duration-300 ${showNavbar ? "translate-y-0" : "-translate-y-full"}`}>
                 <div className="grid grid-cols-[auto_1fr_auto] items-center gap-4">
 
                     {/* Logo */}
@@ -43,9 +42,21 @@ export default function NavBarPublic() {
                         </Link>
                     </div>
 
-                    {/* Search bar */}
-                    <div className="hidden md:flex justify-center">
-                        <SearchBar />
+                    {/* Navigation links */}
+                    <div className="hidden md:flex justify-center gap-10 font-medium">
+
+                        <a href="#hero-search" className="hover:text-primary transition">
+                            Find Services
+                        </a>
+
+                        <a href="#how-it-works" className="hover:text-primary transition">
+                            How It Works
+                        </a>
+
+                        <a href="#categories" className="hover:text-primary transition">
+                            Categories
+                        </a>
+
                     </div>
 
                     {/* Auth buttons */}
