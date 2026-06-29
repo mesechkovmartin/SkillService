@@ -1,2 +1,27 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+html {
+  scroll-behavior: smooth;
+}
+
+.section-highlight {
+    animation: sectionPulse 1s ease-in-out;
+}
+
+@keyframes sectionPulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    40% {
+        transform: scale(1.02);
+        opacity: 0.98;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

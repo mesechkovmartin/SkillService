@@ -1,8 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/logoSkillService.png";
 import { useState, useEffect } from "react";
+import { navigateToSection } from "../../utils/sectionNavigation";
 
 export default function NavBarPublic() {
+    const navigate = useNavigate();
+
     const [showNavbar, setShowNavbar] = useState(true);
 
     useEffect(() => {
@@ -45,15 +48,30 @@ export default function NavBarPublic() {
                     {/* Navigation links */}
                     <div className="hidden md:flex justify-center gap-10 font-medium">
 
-                        <a href="#hero-search" className="hover:text-primary transition">
+                        <a href="#hero-search"
+                            className="hover:text-primary transition"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                navigateToSection("hero-search", navigate);
+                            }}>
                             Find Services
                         </a>
 
-                        <a href="#how-it-works" className="hover:text-primary transition">
+                        <a href="#how-it-works"
+                            className="hover:text-primary transition"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                navigateToSection("how-it-works", navigate);
+                            }}>
                             How It Works
                         </a>
 
-                        <a href="#categories" className="hover:text-primary transition">
+                        <a href="#categories"
+                            className="hover:text-primary transition"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                navigateToSection("categories", navigate);
+                            }}>
                             Categories
                         </a>
 

@@ -1,12 +1,18 @@
 import { useContext } from 'react';
 import { AppContext } from '../../store/app.context';
 import { categories } from '../../constants/categories';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logoSkillService from '../../assets/logoSkillservice.png';
+import { navigateToSection } from '../../utils/sectionNavigation';
+
 
 
 export default function Footer() {
     const { user } = useContext(AppContext);
+
+    const navigate = useNavigate();
+
+    const homePath = user ? "/home" : "/";
 
     return (
         <footer className="bg-slate-950 text-white mt-20">
@@ -47,7 +53,13 @@ export default function Footer() {
                     </h2>
 
                     <div className="space-y-2 text-gray-300">
-                        <a href="#hero-search" className="hover:text-primary transition">
+                        <a href="#hero-search"
+                            className="hover:text-primary transition"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                navigateToSection("hero-search", navigate, homePath);
+                            }}
+                        >
                             Find Services
                         </a>
 

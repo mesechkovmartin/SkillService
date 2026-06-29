@@ -7,6 +7,8 @@ import { categories } from "../../constants/categories"
 import CategoryCard from "../../components/CategoryCard/CategoryCard"
 import HeroSearch from "../../components/HeroSearch/HeroSearch"
 import Footer from "../../components/Footer/Footer"
+import { scrollToSection } from "../../utils/sectionNavigation"
+import { useLocation } from "react-router-dom"
 
 export default function HomePagePrivate() {
     const { user } = useContext(AppContext);
@@ -14,6 +16,8 @@ export default function HomePagePrivate() {
     const [posts, setPosts] = useState([]);
 
     const [selectedCategory, setSelectedCategory] = useState(null);
+
+    const location = useLocation();
 
     const [searchInput, setSearchInput] = useState("");
     const [searchResult, setSearchResult] = useState("");
@@ -27,6 +31,13 @@ export default function HomePagePrivate() {
             .then((data) => setPosts(data))
             .catch((error) => console.error("Error fetching posts:", error));
     }, []);
+
+     useEffect(() => {
+        if (location.state?.scrollTo) {
+            scrollToSection(location.state.scrollTo);
+        }
+    }, [location]);
+
 
     const searchFilteredPosts = posts.filter((post) => {
         const search = searchResult.trim().toLowerCase();

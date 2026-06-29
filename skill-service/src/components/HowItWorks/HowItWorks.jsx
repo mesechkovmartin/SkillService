@@ -1,7 +1,7 @@
 import { FaSearch, FaCalendarAlt, FaCheckCircle } from "react-icons/fa";
 
 export default function HowItWorks() {
-     const steps = [
+    const steps = [
         {
             number: "1",
             icon: FaSearch,
@@ -29,7 +29,7 @@ export default function HowItWorks() {
     ];
 
     return (
-        <section className="py-16">
+        <section className="pt-8 pb-8">
             <div className="text-center mb-16">
                 <h2 className="text-4xl font-bold mb-4">How It Works</h2>
                 <p className="text-lg text-gray-500">

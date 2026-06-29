@@ -54,7 +54,9 @@ export default function PostCard({ post, variant = "public", onEdit, onDelete })
 
                 <h2 className="card-title">{post.title}</h2>
 
-                <p className="line-clamp-3">{post.description}</p>
+                <p className="line-clamp-3">{post.description.length > 30
+                    ? `${post.description.slice(0, 30)}...`
+                    : post.description}</p>
 
                 <p>Category: {post.category}</p>
 
@@ -66,7 +68,6 @@ export default function PostCard({ post, variant = "public", onEdit, onDelete })
 
                         <p className="font-semibold">
                             Price: {post.price} EUR</p>
-
                     </>
                 )}
 

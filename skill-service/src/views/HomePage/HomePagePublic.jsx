@@ -7,6 +7,8 @@ import CategoryCard from '../../components/CategoryCard/CategoryCard';
 import HeroSearch from '../../components/HeroSearch/HeroSearch';
 import HowItWorks from '../../components/HowItWorks/HowItWorks';
 import Footer from '../../components/Footer/Footer';
+import { scrollToSection } from '../../utils/sectionNavigation';
+import { useLocation } from 'react-router-dom';
 
 export default function HomePagePublic() {
 
@@ -14,7 +16,9 @@ export default function HomePagePublic() {
 
     const [selectedCategory, setSelectedCategory] = useState(null);
 
-    //CityInput only for the select.
+    const location = useLocation();
+
+    // CityInput only for the select.
     // cityResult for filtering.
     const [searchInput, setSearchInput] = useState("");
     const [searchResult, setSearchResult] = useState("");
@@ -28,6 +32,12 @@ export default function HomePagePublic() {
             .then((data) => setPosts(data))
             .catch((error) => console.error("Error fetching posts:", error));
     }, []);
+
+    useEffect(() => {
+        if (location.state?.scrollTo) {
+            scrollToSection(location.state.scrollTo);
+        }
+    }, [location]);
 
     const searchFilteredPosts = posts.filter((post) => {
         const search = searchResult.trim().toLowerCase();
@@ -68,7 +78,7 @@ export default function HomePagePublic() {
                 </div>
 
                 {/* Hero Search Section */}
-                <div id="hero-search" className="scroll-mt-60">
+                <div id="hero-search" className="scroll-mt-32 mb-20">
                     <HeroSearch
                         searchInput={searchInput}
                         setSearchInput={setSearchInput}
@@ -112,36 +122,38 @@ export default function HomePagePublic() {
                 )}
 
                 {/* Categories Section */}
-                <div id="categories" className="text-center mb-10 scroll-mt-10">
-                    <h1 className="text-4xl font-bold mb-4">
-                        Browse Categories
-                    </h1>
+                <div id="categories" className="scroll-mt-32">
+                    <div className="text-center mb-10">
+                        <h1 className="text-4xl font-bold mb-4">
+                            Browse Categories
+                        </h1>
 
-                    <p className="text-lg text-gray-500">
-                        Find professionals for every need
-                    </p>
-                </div>
+                        <p className="text-lg text-gray-500">
+                            Find professionals for every need
+                        </p>
+                    </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-5 gap-5 mb-10">
-                    {categories.map((category) => (
-                        <CategoryCard
-                            key={category}
-                            category={category}
-                            selectedCategory={selectedCategory}
-                            onSelect={(category) => {
-                                if (selectedCategory === category) {
-                                    setSelectedCategory(null);
-                                } else {
-                                    setSelectedCategory(category);
-                                }
+                    <div className="grid grid-cols-2 md:grid-cols-5 gap-5 mb-10">
+                        {categories.map((category) => (
+                            <CategoryCard
+                                key={category}
+                                category={category}
+                                selectedCategory={selectedCategory}
+                                onSelect={(category) => {
+                                    if (selectedCategory === category) {
+                                        setSelectedCategory(null);
+                                    } else {
+                                        setSelectedCategory(category);
+                                    }
 
-                                setSearchInput("");
-                                setSearchResult("");
-                                setCityInput("");
-                                setHasSearched(false);
-                            }}
-                        />
-                    ))}
+                                    setSearchInput("");
+                                    setSearchResult("");
+                                    setCityInput("");
+                                    setHasSearched(false);
+                                }}
+                            />
+                        ))}
+                    </div>
                 </div>
 
                 {selectedCategory && (
@@ -172,37 +184,39 @@ export default function HomePagePublic() {
                     </>
                 )}
 
-                <div className="text-center mb-10">
-                    <h1 className="text-4xl font-bold mb-4">
-                        Featured Services
-                    </h1>
+                <section id="featured-services" className="scroll-mt-32 mb-20 min-h-[400px]">
+                    <div className="text-center mb-10">
+                        <h1 className="text-4xl font-bold mb-4">
+                            Featured Services
+                        </h1>
 
-                    <p className="text-lg text-gray-500">
-                        Top-rated professionals right now
-                    </p>
-                </div>
-
-                {featuredPosts.length === 0 ? (
-                    <p className="text-center">
-                        No featured services available yet.
-                    </p>
-                ) : (
-                    <div className="grid gap-5 md:grid-cols-5">
-                        {featuredPosts.map((post) => (
-                            <PostCard
-                                key={post._id}
-                                post={post}
-                                variant="public"
-                            />
-                        ))}
+                        <p className="text-lg text-gray-500">
+                            Top-rated professionals right now
+                        </p>
                     </div>
-                )}
 
-            </div>
+                    {featuredPosts.length === 0 ? (
+                        <p className="text-center">
+                            No featured services available yet.
+                        </p>
+                    ) : (
+                        <div className="grid gap-5 md:grid-cols-5">
+                            {featuredPosts.map((post) => (
+                                <PostCard
+                                    key={post._id}
+                                    post={post}
+                                    variant="public"
+                                />
+                            ))}
+                        </div>
+                    )}
+                </section>
 
-            {/* How It Works Section */}
-            <div id="how-it-works">
-                <HowItWorks />
+                {/* How It Works Section */}
+                <section id="how-it-works" className="scroll-mt-8">
+                    <HowItWorks />
+                </section>
+
             </div>
 
             <Footer />
