@@ -108,7 +108,7 @@ export default function HomePagePrivate() {
                                     <PostCard
                                         key={post._id}
                                         post={post}
-                                        variant="public"
+                                        variant="private"
                                     />
                                 ))}
                             </div>
@@ -168,7 +168,7 @@ export default function HomePagePrivate() {
                                     <PostCard
                                         key={post._id}
                                         post={post}
-                                        variant="public"
+                                        variant="private"
                                     />
                                 ))}
                             </div>
@@ -198,7 +198,7 @@ export default function HomePagePrivate() {
                             <PostCard
                                 key={post._id}
                                 post={post}
-                                variant="public"
+                                variant="private"
                             />
                         ))}
                     </div>
