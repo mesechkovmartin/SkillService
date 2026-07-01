@@ -65,6 +65,8 @@ export default function NavBarPrivate() {
                     </Link>
                 </div>
 
+                <div className="navbar-center"></div>
+
                 {/* User menu */}
                 <div className="flex items-center gap-2">
                     <div className="dropdown dropdown-end">
