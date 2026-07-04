@@ -9,6 +9,7 @@ import NotFound from './components/NotFound/NotFound.jsx'
 import MyServices from './views/MyServices/MyServices.jsx'
 import PostDetails from './views/PostDetails/PostDetails.jsx'
 import Profile from './views/Profile/Profile.jsx'
+import Messages from './views/Messages/Messages.jsx'
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
         <Route path="/my-services" element={<Authenticated><MyServices /></Authenticated>} />
         <Route path="/posts/:id" element ={<Authenticated><PostDetails /></Authenticated>} />
         <Route path="/profile" element={<Authenticated><Profile /></Authenticated>} />
+        <Route path="/messages" element={<Authenticated><Messages /></Authenticated>} />
        </Routes>
     </BrowserRouter> 
   )

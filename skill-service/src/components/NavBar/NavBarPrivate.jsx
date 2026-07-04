@@ -65,7 +65,9 @@ export default function NavBarPrivate() {
                     </Link>
                 </div>
 
-                <div className="navbar-center"></div>
+                <div className="navbar-center">
+                    <Link to="/messages" className="btn btn-ghost normal-case text-xl">Messages</Link>
+                </div>
 
                 {/* User menu */}
                 <div className="flex items-center gap-2">
