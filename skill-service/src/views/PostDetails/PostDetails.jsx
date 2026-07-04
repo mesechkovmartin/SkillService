@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import NavBarPrivate from "../../components/NavBar/NavBarPrivate";
 import { getPostById } from "../../services/post.service.js";
 import defaultPostImage from "../../assets/defaultPostImage.png";
+import { createOrGetConversation } from "../../services/conversation.service.js";
+import { auth } from "../../config/firebase.config.js";
 
 export default function PostDetails() {
     const { id } = useParams();
@@ -12,6 +14,8 @@ export default function PostDetails() {
     const [selectedImageIndex, setSelectedImageIndex] = useState(null);
 
     const displayImages = post?.images?.length > 0 ? post.images : [{ url: defaultPostImage }];
+
+    const navigate = useNavigate();
 
     useEffect(() => {
 
@@ -30,6 +34,25 @@ export default function PostDetails() {
             </>
         );
     }
+
+    const handleMessageOwner = async () => {
+        if (auth.currentUser.uid === post.ownerId) {
+            return;
+        }
+        try {
+            const conversation = await createOrGetConversation(
+                auth.currentUser.uid,
+                post.ownerId
+            );
+
+            navigate("/messages", {
+                state: { conversationId: conversation._id },
+            })
+
+        } catch (error) {
+            console.error("Failed to create conversation:", error);
+        }
+    };
 
     return (
         <>
@@ -57,6 +80,15 @@ export default function PostDetails() {
                 <p>Location: {post.location}</p>
                 <p>Phone: {post.ownerPhoneNumber}</p>
                 <p className="font-semibold">Price: {post.price} EUR</p>
+
+                {auth.currentUser.uid !== post.ownerId && (
+                    <button
+                        className="btn btn-primary mt-4"
+                        onClick={handleMessageOwner}
+                    >
+                        Message owner
+                    </button>
+                )}
             </div>
 
             {selectedImageIndex !== null && (

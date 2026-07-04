@@ -1,13 +1,13 @@
 const BASE_URL = "http://localhost:4000/conversations";
 
 // Get or create a conversation between two users
-export async function createOrGetConversation(currentUserID, receiverId) {
+export async function createOrGetConversation(currentUserId, receiverId) {
     const res = await fetch(BASE_URL, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ currentUserEmail, receiverId })
+        body: JSON.stringify({ currentUserId, receiverId })
     });
 
     if (!res.ok) {

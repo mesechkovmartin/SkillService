@@ -4,11 +4,14 @@ import NavBarPrivate from "../../components/NavBar/NavBarPrivate";
 import ConversationList from "../../components/Messages/ConversationList";
 import ChatWindow from "../../components/Messages/ChatWindow";
 import { getUserConversations } from "../../services/conversation.service";
+import { useLocation } from "react-router-dom";
 
 export default function Messages() {
 
     const [conversations, setConversations] = useState([]);
     const [selectedConversation, setSelectedConversation] = useState(null);
+
+    const location = useLocation();
 
     useEffect(() => {
 
@@ -17,13 +20,26 @@ export default function Messages() {
                 const data = await getUserConversations(auth.currentUser.uid);
 
                 setConversations(data);
+
+                const conversationId = location.state?.conversationId;
+
+                if (conversationId) {
+                    const conversation = data.find(
+                        (conversation) => conversation._id === conversationId
+                    );
+
+                    if (conversation) {
+                        setSelectedConversation(conversation);
+                    }
+                }
+
             } catch (error) {
                 console.error(error);
             }
         }
 
         loadConversations();
-    }, []);
+    }, [location.state]);
 
     return (
         <>
