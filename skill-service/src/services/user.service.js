@@ -33,3 +33,14 @@ export async function deleteProfileImage(token) {
 
     return res.json();
 }
+
+// Get user by UID
+export async function getUserById(uid) {
+    const res = await fetch(`${BASE_URL}/users/${uid}`);
+
+    if (!res.ok) {
+        throw new Error("Failed to fetch user");
+    }
+
+    return res.json();
+}

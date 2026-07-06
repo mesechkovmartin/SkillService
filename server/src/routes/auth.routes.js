@@ -5,6 +5,7 @@ import cloudinary from "../config/cloudinary.js";
 
 const router = Router();
 
+// Get the logged-in user's profile
 router.get("/me", requireAuth, async (req, res) => {
 
     console.log(">>> /auth/me HIT");
@@ -25,6 +26,7 @@ router.get("/me", requireAuth, async (req, res) => {
     res.json(user);
 });
 
+// Update the logged-in user's profile
 router.put("/profile", requireAuth, async (req, res) => {
     try {
         const { uid } = req.firebaseUser;
@@ -64,7 +66,7 @@ router.put("/profile", requireAuth, async (req, res) => {
     }
 });
 
-
+// Delete the logged-in user's profile image
 router.delete("/profile-image", requireAuth, async (req, res) => {
     try {
         const { uid } = req.firebaseUser;
@@ -92,6 +94,23 @@ router.delete("/profile-image", requireAuth, async (req, res) => {
     }
 });
 
+// GEt user by Firebase UID
+router.get("/users/:uid", async (req, res) => {
+    try {
+        const { uid } = req.params;
+
+        const user = await User.findOne({ firebaseUid: uid });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        res.json(user);
+    } catch (error) {
+        console.error("Error fetching user:", error);
+        res.status(500).json({ message: "Error fetching user" });
+    }
+});
 
 export default router;
 
