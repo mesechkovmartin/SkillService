@@ -5,6 +5,7 @@ import ConversationList from "../../components/Messages/ConversationList";
 import ChatWindow from "../../components/Messages/ChatWindow";
 import { getUserConversations } from "../../services/conversation.service";
 import { useLocation } from "react-router-dom";
+import ChatUserInfo from "../../components/Messages/ChatUserInfo";
 
 export default function Messages() {
 
@@ -45,7 +46,7 @@ export default function Messages() {
         <>
             <NavBarPrivate />
 
-            <main className="pt-16 h-screen">
+            <main className="pt-20 h-screen">
                 <div className="flex h-full">
                     <div className="w-80 border-r border-gray-300">
                         <ConversationList
@@ -60,6 +61,12 @@ export default function Messages() {
                             selectedConversation={selectedConversation}
                         />
                     </div>
+
+                    {selectedConversation && (
+                        <div className="w-80 border-l border-gray-300">
+                            <ChatUserInfo selectedConversation={selectedConversation} />
+                        </div>
+                    )}
                 </div>
             </main>
         </>
