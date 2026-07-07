@@ -4,6 +4,7 @@ import authRoutes from "./routes/auth.routes.js";
 import postRoutes from "./routes/post.routes.js";
 import conversationRoutes from "./routes/conversation.routes.js";
 import messageRoutes from "./routes/message.routes.js";
+import commentRoutes from "./routes/comment.routes.js";
 
 const app = express();
 
@@ -28,6 +29,8 @@ app.use("/posts", postRoutes);
 app.use("/conversations", conversationRoutes);
 
 app.use("/messages", messageRoutes);
+
+app.use("/comments", commentRoutes);
 
 app.get("/health", (req, res) => {
   res.json({ ok: true, message: "API is running" });
