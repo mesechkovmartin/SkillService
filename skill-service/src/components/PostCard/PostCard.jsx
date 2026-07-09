@@ -60,7 +60,7 @@ export default function PostCard({ post, variant = "public", onEdit, onDelete })
 
                 <p>Category: {post.category}</p>
 
-                <p>Location: {post.location}</p>
+                <p>Location: {post.location?.city}</p>
 
                 {isPrivate && (
                     <>

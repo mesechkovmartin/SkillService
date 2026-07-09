@@ -10,6 +10,12 @@ router.post("/", async (req, res) => {
         console.log("POST BODY:", req.body);
         const { title, description, images, category, location, ownerEmail, ownerPhoneNumber, ownerId, price } = req.body;
 
+        if (!location?.city || !location?.locationType) {
+            return res.status(400).json({
+                message: "Location city and type are required."
+            });
+        }
+
         const newPost = await Post.create({
             title,
             description,
@@ -89,7 +95,7 @@ router.delete("/:id", async (req, res) => {
 
         if (post.images?.length > 0) {
             await Promise.all(
-                post.images.map((image) => 
+                post.images.map((image) =>
                     cloudinary.uploader.destroy(image.publicId)
                 )
             );

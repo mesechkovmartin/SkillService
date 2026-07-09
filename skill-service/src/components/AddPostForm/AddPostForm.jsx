@@ -4,16 +4,24 @@ import { createPost } from "../../services/post.service";
 import { categories } from "../../constants/categories";
 import { cities } from "../../constants/cities";
 import { uploadImageToCloudinary } from "../../services/cloudinary.service.js";
+import { getCurrentLocationData, completeLocation, updateLocationField } from "../../helpers/location.helper.js";
+import LocationFields from "../Posts/LocationFields.jsx";
 
 export default function AddPostForm({ onPostCreated }) {
     const [formData, setFormData] = useState({
         title: "",
         description: "",
         category: "",
-        location: "",
+        location: {
+            locationType: "city",
+            city: "",
+            area: "",
+            address: "",
+            latitude: null,
+            longitude: null
+        },
         ownerPhoneNumber: "",
         price: ""
-
     });
 
     const [selectedImages, setSelectedImages] = useState([]);
@@ -45,6 +53,8 @@ export default function AddPostForm({ onPostCreated }) {
                 );
             }
 
+            const finalLocation = await completeLocation(formData.location);
+
             const images = uploadedImages.map((image) => ({
                 url: image.imageUrl,
                 publicId: image.publicId
@@ -55,7 +65,7 @@ export default function AddPostForm({ onPostCreated }) {
                 description: formData.description,
                 images: images,
                 category: formData.category,
-                location: formData.location,
+                location: finalLocation,
                 ownerPhoneNumber: formData.ownerPhoneNumber,
                 price: Number(formData.price),
                 ownerEmail: user.email,
@@ -80,12 +90,48 @@ export default function AddPostForm({ onPostCreated }) {
 
     };
 
+    const handleLocationChange = (e) => {
+        const { name, value } = e.target;
+
+        setFormData((oldData) => ({
+            ...oldData,
+            location: updateLocationField(oldData.location, name, value)
+        }));
+    };
+
+    const handleUseCurrentLocation = async () => {
+        try {
+            const locationData = await getCurrentLocationData();
+
+            setFormData((oldData) => ({
+                ...oldData,
+                location: {
+                    ...oldData.location,
+                    latitude: locationData.latitude,
+                    longitude: locationData.longitude,
+                    address: locationData.address,
+                    city: locationData.city || oldData.location.city
+                }
+            }));
+        } catch (error) {
+            console.error(error);
+            alert("Unable to get your current location.");
+        }
+    };
+
     const resetForm = () => {
         setFormData({
             title: "",
             description: "",
             category: "",
-            location: "",
+            location: {
+                locationType: "city",
+                city: "",
+                area: "",
+                address: "",
+                latitude: null,
+                longitude: null
+            },
             ownerPhoneNumber: "",
             price: ""
         });
@@ -161,18 +207,11 @@ export default function AddPostForm({ onPostCreated }) {
                 ))}
             </select>
 
-            <select
-                name="location"
-                className="select select-bordered w-full"
-                value={formData.location}
-                onChange={handleChange}
-                required
-            >
-                <option value="">Select City</option>
-                {cities.map((city) => (
-                    <option key={city} value={city}>{city}</option>
-                ))}
-            </select>
+            <LocationFields
+                location={formData.location}
+                onLocationChange={handleLocationChange}
+                setFormData={setFormData}
+            />
 
             <input
                 name="ownerPhoneNumber"

@@ -3,13 +3,22 @@ import { updatePost } from "../../services/post.service";
 import { categories } from "../../constants/categories";
 import { cities } from "../../constants/cities";
 import { uploadImageToCloudinary } from "../../services/cloudinary.service.js";
+import { getCurrentLocationData, completeLocation, updateLocationField } from "../../helpers/location.helper.js";
+import LocationFields from "../Posts/LocationFields.jsx";
 
 export default function EditPostForm({ post, onClose, onPostUpdated }) {
     const [formData, setFormData] = useState({
         title: post.title,
         description: post.description,
         category: post.category,
-        location: post.location,
+        location: post.location || {
+            locationType: "city",
+            city: "",
+            area: "",
+            address: "",
+            latitude: null,
+            longitude: null
+        },
         ownerPhoneNumber: post.ownerPhoneNumber,
         price: post.price
     });
@@ -23,6 +32,35 @@ export default function EditPostForm({ post, onClose, onPostUpdated }) {
             ...oldData,
             [e.target.name]: e.target.value
         }));
+    };
+
+    const handleLocationChange = (e) => {
+        const { name, value } = e.target;
+
+        setFormData((oldData) => ({
+            ...oldData,
+            location: updateLocationField(oldData.location, name, value)
+        }));
+    };
+
+    const handleUseCurrentLocation = async () => {
+        try {
+            const locationData = await getCurrentLocationData();
+
+            setFormData((oldData) => ({
+                ...oldData,
+                location: {
+                    ...oldData.location,
+                    latitude: locationData.latitude,
+                    longitude: locationData.longitude,
+                    address: locationData.address,
+                    city: locationData.city || oldData.location.city
+                }
+            }));
+        } catch (error) {
+            console.error(error);
+            alert("Unable to get your current location.");
+        }
     };
 
     const handleRemoveExistingImage = (imageToRemove) => {
@@ -54,8 +92,11 @@ export default function EditPostForm({ post, onClose, onPostUpdated }) {
 
             const finalImages = [...existingImages, ...formattedNewImages];
 
+            const finalLocation = await completeLocation(formData.location);
+
             const updatedData = {
                 ...formData,
+                location: finalLocation,
                 price: Number(formData.price),
                 images: finalImages,
                 removedImages: removedImages
@@ -72,6 +113,7 @@ export default function EditPostForm({ post, onClose, onPostUpdated }) {
             alert("Failed to update service");
         }
     };
+
     useEffect(() => {
         document.body.style.overflow = "hidden";
 
@@ -176,18 +218,11 @@ export default function EditPostForm({ post, onClose, onPostUpdated }) {
                         ))}
                     </select>
 
-                    <select
-                        name="location"
-                        className="select select-bordered w-full"
-                        value={formData.location}
-                        onChange={handleChange}
-                        required
-                    >
-                        <option value="">Select City</option>
-                        {cities.map((city) => (
-                            <option key={city} value={city}>{city}</option>
-                        ))}
-                    </select>
+                    <LocationFields
+                        location={formData.location}
+                        onLocationChange={handleLocationChange}
+                        setFormData={setFormData}
+                    />
 
                     <input
                         name="ownerPhoneNumber"

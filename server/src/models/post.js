@@ -9,7 +9,37 @@ const postSchema = new mongoose.Schema(
             validate: { validator: function (value) { return !value || value.length <= 10; }, message: "A post can have a maximum of 10 images." }
         },
         category: { type: String, required: true, trim: true },
-        location: { type: String, required: true },
+        location: {
+            locationType: {
+                type: String,
+                enum: ["city", "approximate", "precise"],
+                default: "city",
+                required: true
+            },
+            city: {
+                type: String,
+                required: true,
+                trim: true
+            },
+            area: {
+                type: String,
+                default: "",
+                trim: true
+            },
+            address: {
+                type: String,
+                default: "",
+                trim: true
+            },
+            latitude: {
+                type: Number,
+                default: null
+            },
+            longitude: {
+                type: Number,
+                default: null
+            }
+        },
         ownerEmail: { type: String, required: true, trim: true, index: true },
         ownerPhoneNumber: { type: String, required: true, trim: true },
         ownerId: { type: String, required: true },

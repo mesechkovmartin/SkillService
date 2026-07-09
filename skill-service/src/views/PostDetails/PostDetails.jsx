@@ -7,6 +7,7 @@ import { createOrGetConversation } from "../../services/conversation.service.js"
 import { auth } from "../../config/firebase.config.js";
 import Footer from "../../components/Footer/Footer.jsx";
 import PostComments from "../../components/Comments/PostComments.jsx";
+import ServiceLocationMap from "../../components/Map/ServiceLocationMap.jsx";
 
 export default function PostDetails() {
     const { id } = useParams();
@@ -127,6 +128,8 @@ export default function PostDetails() {
                             
                         </div>
 
+                        <ServiceLocationMap location={post.location} />
+
                         <PostComments postId={post._id} />
                     </div>
 
@@ -136,7 +139,7 @@ export default function PostDetails() {
                                 {post.price} EUR
                             </p>
                             <p>Category: {post.category}</p>
-                            <p>Location: {post.location}</p>
+                            <p>Location: {post.location?.city}</p>
                             <p>Phone: {post.ownerPhoneNumber}</p>
 
                             {auth.currentUser.uid !== post.ownerId && (
