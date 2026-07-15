@@ -1,2 +1,2 @@
 # SkillService
-SkillService is a full-stack web app for offering and booking local services in Bulgarian cities.
+A full-stack marketplace for discovering, offering, and managing local services, featuring image uploads, location-based search, authentication, and private messaging.
